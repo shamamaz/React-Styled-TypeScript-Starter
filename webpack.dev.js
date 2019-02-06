@@ -15,6 +15,10 @@ module.exports = merge(common, {
         target: 'http://localhost:8000',
         secure: false,
       },
+      '/image.jpg': {
+        target: 'http://localhost:8000',
+        secure: false,
+      },
     },
   },
   plugins: [new webpack.HotModuleReplacementPlugin()],

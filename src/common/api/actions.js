@@ -1,4 +1,5 @@
 import * as types from './types'
+import queryString from 'query-string'
 import { BASE_URL } from '../constants/apiUrl'
 
 const simpleAction = () => dispatch => {
@@ -8,7 +9,7 @@ const simpleAction = () => dispatch => {
   })
 }
 
-function fetchFeeds() {
+function fetchFeeds(params) {
   return async dispatch => {
     async function onSuccess(success) {
       const json = await success.json()
@@ -21,7 +22,10 @@ function fetchFeeds() {
       return error
     }
     try {
-      const url = BASE_URL
+      const data = {
+        sort: params.sortBy,
+      }
+      const url = BASE_URL + '?' + queryString.stringify(data)
       const success = await fetch(url, {
         method: 'get',
       })
@@ -32,13 +36,13 @@ function fetchFeeds() {
   }
 }
 
-function fetchFeed(id) {
+function fetchFeed(id, params) {
   return async dispatch => {
-    async function onSuccess(success) {
+    async function onSuccess(success, activeId) {
       const json = await success.json()
       const payload = {
+        activeId,
         feed: json.feed,
-        id,
       }
       dispatch({ type: types.FETCH_FEED_SUCCESS, payload })
       return success
@@ -48,11 +52,14 @@ function fetchFeed(id) {
       return error
     }
     try {
-      const url = BASE_URL + id
+      const data = {
+        sort: params.sortBy,
+      }
+      const url = BASE_URL + '/' + id + '?' + queryString.stringify(data)
       const success = await fetch(url, {
         method: 'get',
       })
-      return onSuccess(success)
+      return onSuccess(success, id)
     } catch (error) {
       return onError(error)
     }

@@ -60,33 +60,35 @@ const mapStatetoProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchFeeds: () => dispatch(fetchFeeds()),
-    fetchFeed: (id: string) => dispatch(fetchFeed(id)),
+    fetchFeeds: (params: { sortBy: string }) => dispatch(fetchFeeds(params)),
+    fetchFeed: (id: string, params: { sortBy: string }) =>
+      dispatch(fetchFeed(id, params)),
   }
 }
 
 interface AppProps {
-  fetchFeeds: () => Promise<string>
-  fetchFeed: (id: string) => Promise<string>
+  fetchFeeds: (params: { sortBy: string }) => Promise<string>
+  fetchFeed: (id: string, params: { sortBy: string }) => Promise<string>
   result: any
 }
 
 class App extends React.Component<AppProps> {
   constructor(props: AppProps) {
     super(props)
-    this.props.fetchFeeds()
-    // TODO SZ then fetch at least one feed to show
+    this.props.fetchFeeds({ sortBy: 'id' })
   }
 
-  fetchFeed = (id: string) => {
-    this.props.fetchFeed(id)
+  fetchFeed = (id: string, params: string[]) => {
+    this.props.fetchFeed(id, { sortBy: 'id' })
   }
 
   renderFeedList = () => {
     const result = this.props.result.feeds
-
     const listItems = result.map(feed => (
-      <li key={feed.id} onClick={this.props.fetchFeed.bind(null, feed.id)}>
+      <li
+        key={feed.id}
+        onClick={this.props.fetchFeed.bind(null, feed.id, { sortBy: 'id' })}
+      >
         {feed.title}
       </li>
     ))
@@ -95,10 +97,9 @@ class App extends React.Component<AppProps> {
 
   renderActiveFeed = () => {
     const feed = this.props.result.feed
-
     const listPapers = feed.map(paper => (
-      <li key={paper.id}>
-        <img src={require(paper.photo)} alt="Paper pic" />
+      <li key={paper.id} style={{ display: 'flex' }}>
+        <img src={paper.photo} alt="Paper pic" style={{ padding: '4px' }} />
         {paper.title}
         <ul>
           <li> Journal: {paper.journal} </li>
@@ -122,6 +123,12 @@ class App extends React.Component<AppProps> {
     return <div>Loading...</div>
   }
 
+  getPapers = () => {
+    if (this.props.result.activeId) {
+      this.props.fetchFeed(this.props.result.activeId, { sortBy: 'date' })
+    }
+  }
+
   render() {
     return (
       <div className="App">
@@ -131,12 +138,17 @@ class App extends React.Component<AppProps> {
           style={{ display: 'flex', position: 'relative' }}
         >
           <Nav>
-            <button onClick={this.props.fetchFeeds}>Feeds ↺</button>
+            <button
+              onClick={this.props.fetchFeeds.bind(null, { sortBy: 'id' })}
+            >
+              Feeds ↺
+            </button>
             {this.props.result.feeds && this.props.result.feeds.length
               ? this.renderFeedList()
               : this.loading()}
           </Nav>
           <ActiveFeed>
+            <button onClick={this.getPapers}>Sort Papers By Date</button>
             {this.props.result.feed && this.props.result.feed.length
               ? this.renderActiveFeed()
               : this.loading()}

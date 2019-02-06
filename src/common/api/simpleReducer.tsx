@@ -10,7 +10,7 @@ export default (state = {}, action: any) => {
       return {
         ...state,
         feed: action.payload.feed,
-        activeId: action.payload.id,
+        activeId: action.payload.activeId,
       }
     default:
       return state
