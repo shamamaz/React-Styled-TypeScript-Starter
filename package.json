@@ -27,8 +27,12 @@
   "author": "Paul Yoon",
   "license": "ISC",
   "dependencies": {
+    "@types/react-redux": "^7.0.1",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
+    "react-redux": "^6.0.0",
+    "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0",
     "styled-components": "^4.1.1"
   },
   "devDependencies": {
@@ -62,7 +66,7 @@
     "react-test-renderer": "^16.6.3",
     "thread-loader": "^1.2.0",
     "ts-jest": "^23.10.4",
-    "tslint": "^5.11.0",
+    "tslint": "^5.10.0",
     "tslint-config-prettier": "^1.16.0",
     "tslint-eslint-rules": "^5.4.0",
     "tslint-react": "^3.6.0",
@@ -71,7 +75,7 @@
     "typescript-styled-plugin": "^0.13.0",
     "webpack": "^4.26.0",
     "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.10",
+    "webpack-dev-server": "^3.1.14",
     "webpack-merge": "^4.1.4"
   },
   "jest": {

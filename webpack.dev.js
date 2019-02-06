@@ -9,12 +9,13 @@ module.exports = merge(common, {
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
     hot: true,
-    port: 5000,
+    port: 5001,
     proxy: {
-      /* useful for proxying localhost api here */
-    }
+      '/api': {
+        target: 'http://localhost:8000',
+        secure: false,
+      },
+    },
   },
-  plugins: [
-    new webpack.HotModuleReplacementPlugin()
-  ]
+  plugins: [new webpack.HotModuleReplacementPlugin()],
 })

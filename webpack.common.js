@@ -38,7 +38,7 @@ const plugins = [
 ]
 
 const resolve = {
-  extensions: ['.ts', '.tsx', '.js', '.json'],
+  extensions: ['.ts', '.tsx', '.js', '.json', '.jpg'],
 }
 
 module.exports = {
