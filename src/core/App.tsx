@@ -1,7 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { fetchFeeds, fetchFeed } from './common/api/actions'
+import { fetchFeeds, fetchFeed } from '../common/api/actions'
 import styled from 'styled-components'
+import { Nav } from '../common/components'
+import { Main } from '../core/components'
 
 const Rectangle = styled.div`
   height: 30px;
@@ -15,43 +17,11 @@ const Rectangle = styled.div`
   color: white;
   padding: 16px;
 `
-
-const Nav = styled.div`
-  width: 15%;
-  min-width: 60px;
-  background-color: rgb(120, 100, 123);
-  justify-content: left;
-  align-items: left;
-  font-family: 'Montserrat';
-  font-size: 15px;
-  color: white;
-  padding: 16px;
-  button {
-    background: transparent;
-    border: none;
-    font-size: 30px;
-    color: white;
-  }
-  ul {
-    list-style: none;
-    padding-inline-start: 0px;
-    li {
-      margin: 4px;
-    }
-  }
+const MainPage = styled.div`
+  display: flex;
+  position: relative;
 `
 
-const ActiveFeed = styled.div`
-  width: 85%;
-  min-width: 40px;
-  justify-content: left;
-  align-items: left;
-  font-family: 'Montserrat';
-  font-size: 17px;
-  color: black;
-  padding: 16px;
-  height: 100%;
-`
 const mapStatetoProps = state => {
   return {
     result: state.simpleReducer,
@@ -82,19 +52,6 @@ class App extends React.Component<AppProps> {
     this.props.fetchFeed(id, { sortBy: 'id' })
   }
 
-  renderFeedList = () => {
-    const result = this.props.result.feeds
-    const listItems = result.map(feed => (
-      <li
-        key={feed.id}
-        onClick={this.props.fetchFeed.bind(null, feed.id, { sortBy: 'id' })}
-      >
-        {feed.title}
-      </li>
-    ))
-    return <ul>{listItems}</ul>
-  }
-
   renderActiveFeed = () => {
     const feed = this.props.result.feed
     const listPapers = feed.map(paper => (
@@ -120,7 +77,7 @@ class App extends React.Component<AppProps> {
   }
 
   loading = () => {
-    return <div>Loading...</div>
+    return <div>Click on a feed to see its papers...</div>
   }
 
   getPapers = () => {
@@ -133,27 +90,10 @@ class App extends React.Component<AppProps> {
     return (
       <div className="App">
         <Rectangle>React, TS, the whole shebang</Rectangle>
-        <div
-          className="contents"
-          style={{ display: 'flex', position: 'relative' }}
-        >
-          <Nav>
-            <button
-              onClick={this.props.fetchFeeds.bind(null, { sortBy: 'id' })}
-            >
-              Feeds ↺
-            </button>
-            {this.props.result.feeds && this.props.result.feeds.length
-              ? this.renderFeedList()
-              : this.loading()}
-          </Nav>
-          <ActiveFeed>
-            <button onClick={this.getPapers}>Sort Papers By Date</button>
-            {this.props.result.feed && this.props.result.feed.length
-              ? this.renderActiveFeed()
-              : this.loading()}
-          </ActiveFeed>
-        </div>
+        <MainPage>
+          <Nav {...this.props} />
+          <Main {...this.props} />
+        </MainPage>
       </div>
     )
   }

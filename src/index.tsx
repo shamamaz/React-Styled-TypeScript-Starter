@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import configureStore from './common/store'
 
-import App from './App'
+import App from './core/App'
 
 ReactDOM.render(
   <Provider store={configureStore()}>
