@@ -1,4 +1,6 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { fetchFeeds, fetchFeed } from '../../api/actions'
 import styled from 'styled-components'
 
 const Style = styled.div`
@@ -26,13 +28,27 @@ const Style = styled.div`
   }
 `
 
+const mapDispatchToProps = dispatch => {
+  return {
+    fetchFeeds: (params: { sortBy: string }) => dispatch(fetchFeeds(params)),
+    fetchFeed: (id: string, params: { sortBy: string }) =>
+      dispatch(fetchFeed(id, params)),
+  }
+}
+
+const mapStatetoProps = state => {
+  return {
+    result: state.simpleReducer,
+  }
+}
+
 interface AppProps {
   fetchFeeds: (params: { sortBy: string }) => Promise<string>
   fetchFeed: (id: string, params: { sortBy: string }) => Promise<string>
   result: any
 }
 
-const Nav = (props: AppProps) => {
+const Nav: React.SFC<AppProps> = appProps => {
   function renderFeedList(props: AppProps) {
     const { feeds } = props.result
     const listItems = feeds.map(feed => (
@@ -56,14 +72,17 @@ const Nav = (props: AppProps) => {
 
   return (
     <Style>
-      <button onClick={props.fetchFeeds.bind(null, { sortBy: 'id' })}>
+      <button onClick={appProps.fetchFeeds.bind(null, { sortBy: 'id' })}>
         Feeds ↺
       </button>
-      {props.result.feeds && props.result.feeds.length
-        ? renderFeedList(props)
+      {appProps.result.feed && appProps.result.feeds.length
+        ? renderFeedList(appProps)
         : loading()}
     </Style>
   )
 }
 
-export default Nav
+export default connect(
+  mapStatetoProps,
+  mapDispatchToProps
+)(Nav)

@@ -15,7 +15,7 @@ module.exports = merge(common, {
         target: 'http://localhost:8000',
         secure: false,
       },
-      '/image.jpg': {
+      '/image*': {
         target: 'http://localhost:8000',
         secure: false,
       },

@@ -1,4 +1,9 @@
-import * as types from './types'
+import {
+  FETCH_FEEDS_SUCCESS,
+  FETCH_FEEDS_FAILED,
+  FETCH_FEED_SUCCESS,
+  FETCH_FEED_FAILED,
+} from './types'
 import queryString from 'query-string'
 import { BASE_URL } from '../constants/apiUrl'
 
@@ -14,11 +19,11 @@ function fetchFeeds(params) {
     async function onSuccess(success) {
       const json = await success.json()
       const payload = json.feeds
-      dispatch({ type: types.FETCH_FEEDS_SUCCESS, payload })
+      dispatch({ type: FETCH_FEEDS_SUCCESS, payload })
       return success
     }
     async function onError(error) {
-      dispatch({ type: types.FETCH_FEEDS_FAILED, error })
+      dispatch({ type: FETCH_FEEDS_FAILED, error })
       return error
     }
     try {
@@ -44,11 +49,11 @@ function fetchFeed(id, params) {
         activeId,
         feed: json.feed,
       }
-      dispatch({ type: types.FETCH_FEED_SUCCESS, payload })
+      dispatch({ type: FETCH_FEED_SUCCESS, payload })
       return success
     }
     async function onError(error) {
-      dispatch({ type: types.FETCH_FEED_FAILED, error })
+      dispatch({ type: FETCH_FEED_FAILED, error })
       return error
     }
     try {

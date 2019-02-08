@@ -1,4 +1,6 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { fetchFeeds, fetchFeed } from '../../../common/api/actions'
 import styled from 'styled-components'
 
 const Style = styled.div`
@@ -19,7 +21,21 @@ interface AppProps {
   result: any
 }
 
-const Main = (props: AppProps) => {
+const mapDispatchToProps = dispatch => {
+  return {
+    fetchFeeds: (params: { sortBy: string }) => dispatch(fetchFeeds(params)),
+    fetchFeed: (id: string, params: { sortBy: string }) =>
+      dispatch(fetchFeed(id, params)),
+  }
+}
+
+const mapStatetoProps = state => {
+  return {
+    result: state.simpleReducer,
+  }
+}
+
+const Main: React.SFC<AppProps> = appProps => {
   function renderActiveFeed(props: AppProps) {
     const { feed } = props.result
 
@@ -59,14 +75,14 @@ const Main = (props: AppProps) => {
     }
   }
 
-  if (props.result.feed) {
+  if (appProps.result.feed) {
     return (
       <Style>
-        <button onClick={getPapers.bind(null, props)}>
+        <button onClick={getPapers.bind(null, appProps)}>
           Sort Papers By Date
         </button>
-        {props.result.feed && props.result.feed.length
-          ? renderActiveFeed(props)
+        {appProps.result.feed && appProps.result.feed.length
+          ? renderActiveFeed(appProps)
           : loading()}
       </Style>
     )
@@ -75,4 +91,7 @@ const Main = (props: AppProps) => {
   }
 }
 
-export default Main
+export default connect(
+  mapStatetoProps,
+  mapDispatchToProps
+)(Main)
